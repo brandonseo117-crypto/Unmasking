@@ -1,0 +1,45 @@
+.page-layout {
+    display: grid;
+    place-items: center;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    width: 500px;
+    height: 500px;
+    border: 2px solid black;
+}
+
+.tile {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/7f/Usamljeni_jasen_-_panoramio_%28cropped%29.jpg');
+    background-size: 400% 400%;
+    background-repeat: no-repeat;
+    border: 2px solid black;
+    opacity: 0;
+}
+
+.tile:nth-child(1) { background-position: 0% 0%; }
+.tile:nth-child(2) { background-position: 33.33% 0%; }
+.tile:nth-child(3) { background-position: 66.66% 0%; }
+.tile:nth-child(4) { background-position: 100% 0%; }
+
+.tile:nth-child(5) { background-position: 0% 33.33%; }
+.tile:nth-child(6) { background-position: 33.33% 33.33%; }
+.tile:nth-child(7) { background-position: 66.66% 33.33%; }
+.tile:nth-child(8) { background-position: 100% 33.33%; }
+
+.tile:nth-child(9) { background-position: 0% 66.66%; }
+.tile:nth-child(10) { background-position: 33.33% 66.66%; }
+.tile:nth-child(11) { background-position: 66.66% 66.66%; }
+.tile:nth-child(12) { background-position: 100% 66.66%; }
+
+.tile:nth-child(13) { background-position: 0% 100%; }
+.tile:nth-child(14) { background-position: 33.33% 100%; }
+.tile:nth-child(15) { background-position: 66.66% 100%; }
+.tile:nth-child(16) { background-position: 100% 100%; }
+
+.appear {
+    opacity: 1
+}
