@@ -58,7 +58,6 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
 }
-.win {}
 
 #option1 { width: 100%; border: 2px solid rgb(0, 0, 0); }
 #option2 { width: 100%; border: 2px solid rgb(0, 0, 0);}
