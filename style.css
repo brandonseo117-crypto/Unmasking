@@ -45,7 +45,22 @@
 }
 
 .challenge {
-    border: 2px solid green;
+    border: 2px dotted green;
     visibility: visible;
     background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/89/HD_transparent_picture.png');
 }
+
+.option-bar {
+    border: 2px solid black;
+    width: 500px;
+    height: 125px;
+    margin: 10px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+.win {}
+
+#option1 { width: 100%; border: 2px solid rgb(0, 0, 0); }
+#option2 { width: 100%; border: 2px solid rgb(0, 0, 0);}
+#option3 { width: 100%; border: 2px solid rgb(0, 0, 0);}
+#option4 { width: 100%; border: 2px solid rgb(0, 0, 0);}
