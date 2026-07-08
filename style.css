@@ -13,10 +13,36 @@
 }
 
 .tile {
-    background-image: url('https://i.etsystatic.com/26651277/r/il/7501ba/3558916679/il_fullxfull.3558916679_q38o.jpg');
+    background-image: url('https://cdn-icons-png.flaticon.com/512/3692/3692220.png');
     background-size: 400% 400%;
     background-repeat: no-repeat;
     visibility: hidden;
+}
+
+.puzzle-reference {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 12px;
+}
+
+#reference-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    width: 250px;
+    height: 250px;
+    border: 2px solid black;
+}
+
+#reference-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border: 2px solid black;
+    border-radius: 8px;
 }
 
 .tile:nth-child(1) { background-position: 0% 0%; }
