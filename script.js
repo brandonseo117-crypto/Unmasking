@@ -69,6 +69,21 @@ function renderOptions() {
     }
 };
 
+function isAdjacentToRevealed(tile) {
+    const tileIndex = tiles.indexOf(tile);
+    const row = Math.floor(tileIndex / 4);
+    const col = tileIndex % 4;
+
+    const neighbors = [
+        row > 0 ? tiles[(row - 1) * 4 + col] : null,
+        row < 3 ? tiles[(row + 1) * 4 + col] : null,
+        col > 0 ? tiles[row * 4 + (col - 1)] : null,
+        col < 3 ? tiles[row * 4 + (col + 1)] : null
+    ].filter(Boolean);
+
+    return neighbors.some((neighbor) => revealedTiles.includes(neighbor));
+}
+
 function startRound() {
     renderBoard();
 
@@ -82,7 +97,10 @@ function startRound() {
         return;
     }
 
-    currentTargetTile = shuffleArray(hiddenTiles)[0];
+    const availableTargets = hiddenTiles.filter((tile) => isAdjacentToRevealed(tile));
+    const candidateTargets = availableTargets.length > 0 ? availableTargets : hiddenTiles;
+
+    currentTargetTile = shuffleArray(candidateTargets)[0];
     currentTargetTile.classList.add('challenge');
     currentTargetTile.style.visibility = 'visible';
 
