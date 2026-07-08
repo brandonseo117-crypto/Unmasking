@@ -7,11 +7,11 @@ let currentOptions = [];
 for (let i = 0; i < 4; i++) {
     const optionContainer = document.getElementById(`option${i + 1}`);
     optionContainers.push(optionContainer);
-}
+};
 
 function randint(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
 function shuffleArray(items) {
     const shuffled = [...items];
@@ -20,7 +20,7 @@ function shuffleArray(items) {
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     return shuffled;
-}
+};
 
 function renderBoard() {
     for (const tile of tiles) {
@@ -29,7 +29,7 @@ function renderBoard() {
         tile.classList.toggle('appear', isRevealed);
         tile.style.visibility = isRevealed ? 'visible' : 'hidden';
     }
-}
+};
 
 function buildOptions() {
     const hiddenTiles = tiles.filter((tile) => !revealedTiles.includes(tile));
@@ -38,7 +38,7 @@ function buildOptions() {
     if (remainingCount === 0 || !currentTargetTile) {
         currentOptions = [];
         return;
-    }
+    };
 
     const optionSource = remainingCount <= 3
         ? tiles.filter((tile) => tile !== currentTargetTile)
@@ -48,7 +48,7 @@ function buildOptions() {
         .slice(0, 3);
 
     currentOptions = shuffleArray([currentTargetTile, ...distractors]);
-}
+};
 
 function renderOptions() {
     for (const container of optionContainers) {
@@ -67,7 +67,7 @@ function renderOptions() {
         copiedChoice.style.height = '100%';
         optionContainers[i].appendChild(copiedChoice);
     }
-}
+};
 
 function startRound() {
     renderBoard();
@@ -88,14 +88,14 @@ function startRound() {
 
     buildOptions();
     renderOptions();
-}
+};
 
 function initializeBoard() {
     revealedTiles.length = 0;
     const initialTiles = shuffleArray(tiles).slice(0, 2);
     revealedTiles.push(...initialTiles);
     startRound();
-}
+};
 
 function checkAnswer() {
     for (let i = 0; i < optionContainers.length; i++) {
@@ -117,7 +117,7 @@ function checkAnswer() {
             }
         });
     }
-}
+};
 
 initializeBoard();
 checkAnswer();
