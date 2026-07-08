@@ -9,12 +9,12 @@ const tiles = document.querySelectorAll('.tile');
 for (let i=0; i < 4; i++) {
     const optionContainer = document.getElementById(`option${i+1}`);
     optionContainers.push(optionContainer);
-}; // initializes containers for options
+} // initializes containers for options
 
 
 function randint(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+}
 
 function chooseTwo() {
     while (appearedObjects.length < 2) {
@@ -28,17 +28,21 @@ function chooseTwo() {
             };
         };
     }; // picks two tiles to appear randomly
-    for (const appearedObject of appearedObjects) {
-        appearedObject.classList.toggle('appear')
-    }; 
 };
 
-chooseTwo()
+function iterateAppear() {
+    for (const appearedObject of appearedObjects) {
+        appearedObject.classList.toggle('appear');
+}
+}
+
+chooseTwo();
+iterateAppear();
 
 function oneTile() {
     for (const ogTile of tiles) {
         if (!appearedObjects.includes(ogTile)) {
-            disappearedObjects.push(ogTile)
+            disappearedObjects.push(ogTile);
         }
     }
     while (chosenOne.length < 1) {
@@ -47,39 +51,39 @@ function oneTile() {
             secondMagicNumber = 0;
             if (theNumber === secondMagicNumber) {
                 disappearedObjects[i].classList.add('win');
-                console.log(disappearedObjects)
                 chosenOne.push(disappearedObjects[i]);
                 options.push(disappearedObjects[i]);
                 disappearedObjects[i].classList.toggle('challenge');
+                console.log(chosenOne[0]);
                 break;
 
-            };
+            }
 
-        };
-    };
-};
+        }
+    }
+}
 
-oneTile()
+oneTile();
 
 function determineOptions() {
     while (options.length < 4) {
         for (let i=0; i < disappearedObjects.length-1; i++) {
-            anotherNumber = randint(0, options.length - 1)
-            thirdMagicNumber = 0
+            anotherNumber = randint(0, options.length - 1);
+            thirdMagicNumber = 0;
             if (anotherNumber === thirdMagicNumber && !options.includes(disappearedObjects[i]) && options.length != 4) {
-                anotherNotherNumber = randint(0,1)
+                anotherNotherNumber = randint(0,1);
                 if (anotherNotherNumber === 1) {
-                    options.push(disappearedObjects[i])
+                    options.push(disappearedObjects[i]);
                 }
                 else {
-                    options.unshift(disappearedObjects[i])
+                    options.unshift(disappearedObjects[i]);
                 }
-            };
-        };
-    };
-};
+            }
+        }
+    }
+}
 
-determineOptions()
+determineOptions();
 
 function makeOptionsVisible() {
     for (let i=0; i < 4; i++) {
@@ -91,24 +95,24 @@ function makeOptionsVisible() {
         copiedChoice.style.visibility = 'visible';
         copiedChoice.style.width = '100%';
         copiedChoice.style.height = '100%';
-        optionContainers[i].appendChild(copiedChoice)
-    };
-};
+        optionContainers[i].appendChild(copiedChoice);
+    }
+}
 
-makeOptionsVisible()
+makeOptionsVisible();
 
 function checkAnswer() {
     for (let i=0; i < optionContainers.length; i++) {
         optionContainers[i].addEventListener('click', () => {
             const child = optionContainers[i].querySelector(`#opt${i+1}`);
                 if (child.classList.contains('win')) {
-                    console.log('W')
+                    console.log('W');
                 }
                 else {
-                    console.log('L')
-                };
+                    console.log('L');
+                }
         });
-    };
-};
+    }
+}
 
-checkAnswer()
+checkAnswer();

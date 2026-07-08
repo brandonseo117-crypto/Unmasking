@@ -59,7 +59,19 @@
     grid-template-columns: repeat(4, 1fr);
 }
 
-#option1 { width: 100%; border: 2px solid rgb(0, 0, 0); }
-#option2 { width: 100%; border: 2px solid rgb(0, 0, 0);}
-#option3 { width: 100%; border: 2px solid rgb(0, 0, 0);}
-#option4 { width: 100%; border: 2px solid rgb(0, 0, 0);}
+#option1 { 
+    width: 100%; 
+    border: 2px solid rgb(0, 0, 0); 
+}
+#option2 { 
+    width: 100%; 
+    border: 2px solid rgb(0, 0, 0);
+}
+#option3 { 
+    width: 100%; 
+    border: 2px solid rgb(0, 0, 0);
+}
+#option4 { 
+    width: 100%; 
+    border: 2px solid rgb(0, 0, 0);
+}
