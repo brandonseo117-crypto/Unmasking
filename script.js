@@ -1,42 +1,17 @@
-const appearedObjects = [];
-const disappearedObjects = [];
-const magicNumber = 11;
-const chosenOne = [];
-const options = [];
+const revealedTiles = [];
 const optionContainers = [];
-const tiles = document.querySelectorAll('.tile');
+const tiles = Array.from(document.querySelectorAll('.tile'));
+let currentTargetTile = null;
+let currentOptions = [];
 
-for (let i=0; i < 4; i++) {
-    const optionContainer = document.getElementById(`option${i+1}`);
+for (let i = 0; i < 4; i++) {
+    const optionContainer = document.getElementById(`option${i + 1}`);
     optionContainers.push(optionContainer);
-}; // initializes containers for options
-
+}
 
 function randint(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-
-while (appearedObjects.length < 2) {
-    for (let i = tiles.length - 1; i >= 0; i--) {
-        const yourNumber = randint(0,tiles.length);
-        if (yourNumber === magicNumber && !appearedObjects.includes(tiles[i])) {
-            appearedObjects.push(tiles[i]);
-            if (appearedObjects.length === 2) {
-                break;
-            };
-        };
-    };
-}; // picks two tiles to appear randomly
-
-
-function iterateAppear() {
-    for (const appearedObject of appearedObjects) {
-        appearedObject.classList.toggle('appear')
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-};
-
-iterateAppear();
 
 function shuffleArray(items) {
     const shuffled = [...items];
@@ -47,76 +22,102 @@ function shuffleArray(items) {
     return shuffled;
 }
 
-function oneTile() {
-    disappearedObjects.length = 0;
-    chosenOne.length = 0;
-    options.length = 0;
-
-    for (const ogTile of tiles) {
-        if (!appearedObjects.includes(ogTile)) {
-            disappearedObjects.push(ogTile);
-        }
+function renderBoard() {
+    for (const tile of tiles) {
+        const isRevealed = revealedTiles.includes(tile);
+        tile.classList.remove('challenge');
+        tile.classList.toggle('appear', isRevealed);
+        tile.style.visibility = isRevealed ? 'visible' : 'hidden';
     }
+}
 
-    if (disappearedObjects.length === 0) {
+function buildOptions() {
+    const hiddenTiles = tiles.filter((tile) => !revealedTiles.includes(tile));
+    const remainingCount = hiddenTiles.length;
+
+    if (remainingCount === 0 || !currentTargetTile) {
+        currentOptions = [];
         return;
     }
 
-    const correctTile = disappearedObjects[randint(0, disappearedObjects.length - 1)];
-    correctTile.classList.add('win', 'challenge');
-    chosenOne.push(correctTile);
-    options.push(correctTile);
+    const optionSource = remainingCount <= 3
+        ? tiles.filter((tile) => tile !== currentTargetTile)
+        : hiddenTiles.filter((tile) => tile !== currentTargetTile);
 
-    const remainingTiles = disappearedObjects.filter((tile) => tile !== correctTile);
-    const shuffledRemaining = shuffleArray(remainingTiles).slice(0, 3);
+    const distractors = shuffleArray(optionSource)
+        .slice(0, 3);
 
-    for (const tile of shuffledRemaining) {
-        options.push(tile);
+    currentOptions = shuffleArray([currentTargetTile, ...distractors]);
+}
+
+function renderOptions() {
+    for (const container of optionContainers) {
+        container.innerHTML = '';
     }
 
-    const shuffledOptions = shuffleArray(options);
-    options.length = 0;
-    options.push(...shuffledOptions);
-};
-
-oneTile();
-
-function determineOptions() {
-    const shuffledOptions = shuffleArray(options);
-    options.length = 0;
-    options.push(...shuffledOptions);
-};
-
-determineOptions();
-
-function makeOptionsVisible() {
-    for (let i=0; i < 4; i++) {
-        const copiedChoice = options[i].cloneNode(true);
-        copiedChoice.id = `opt${i+1}`;
+    for (let i = 0; i < currentOptions.length; i++) {
+        const copiedChoice = currentOptions[i].cloneNode(true);
+        copiedChoice.id = `opt${i + 1}`;
         copiedChoice.classList.remove('appear', 'challenge');
-        const computedPosition = window.getComputedStyle(options[i]).backgroundPosition;
+
+        const computedPosition = window.getComputedStyle(currentOptions[i]).backgroundPosition;
         copiedChoice.style.backgroundPosition = computedPosition;
         copiedChoice.style.visibility = 'visible';
         copiedChoice.style.width = '100%';
         copiedChoice.style.height = '100%';
-        optionContainers[i].appendChild(copiedChoice)
-    };
-};
+        optionContainers[i].appendChild(copiedChoice);
+    }
+}
 
-makeOptionsVisible();
+function startRound() {
+    renderBoard();
+
+    const hiddenTiles = tiles.filter((tile) => !revealedTiles.includes(tile));
+    if (hiddenTiles.length === 0) {
+        currentTargetTile = null;
+        currentOptions = [];
+        for (const container of optionContainers) {
+            container.innerHTML = '';
+        }
+        return;
+    }
+
+    currentTargetTile = shuffleArray(hiddenTiles)[0];
+    currentTargetTile.classList.add('challenge');
+    currentTargetTile.style.visibility = 'visible';
+
+    buildOptions();
+    renderOptions();
+}
+
+function initializeBoard() {
+    revealedTiles.length = 0;
+    const initialTiles = shuffleArray(tiles).slice(0, 2);
+    revealedTiles.push(...initialTiles);
+    startRound();
+}
 
 function checkAnswer() {
-    for (let i=0; i < optionContainers.length; i++) {
+    for (let i = 0; i < optionContainers.length; i++) {
         optionContainers[i].addEventListener('click', () => {
-            const child = optionContainers[i].querySelector(`#opt${i+1}`);
-                if (child.classList.contains('win')) {
-                    console.log('W');
-                }
-                else {
-                    console.log('L');
-                };
-        });
-    };
-};
+            const child = optionContainers[i].querySelector(`#opt${i + 1}`);
+            if (!child || !currentTargetTile) {
+                return;
+            }
 
+            const selectedPosition = child.style.backgroundPosition;
+            const targetPosition = window.getComputedStyle(currentTargetTile).backgroundPosition;
+
+            if (selectedPosition === targetPosition) {
+                revealedTiles.push(currentTargetTile);
+                currentTargetTile.classList.remove('challenge');
+                currentTargetTile.classList.add('appear');
+                currentTargetTile.style.visibility = 'visible';
+                startRound();
+            }
+        });
+    }
+}
+
+initializeBoard();
 checkAnswer();
