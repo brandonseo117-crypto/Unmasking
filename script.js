@@ -9,79 +9,83 @@ const tiles = document.querySelectorAll('.tile');
 for (let i=0; i < 4; i++) {
     const optionContainer = document.getElementById(`option${i+1}`);
     optionContainers.push(optionContainer);
-} // initializes containers for options
+}; // initializes containers for options
 
 
 function randint(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
-function chooseTwo() {
-    while (appearedObjects.length < 2) {
-        for (let i = tiles.length - 1; i >= 0; i--) {
-            const yourNumber = randint(0,tiles.length);
-            if (yourNumber === magicNumber && !appearedObjects.includes(tiles[i])) {
-                appearedObjects.push(tiles[i]);
-                if (appearedObjects.length === 2) {
-                    break;
-                };
+
+while (appearedObjects.length < 2) {
+    for (let i = tiles.length - 1; i >= 0; i--) {
+        const yourNumber = randint(0,tiles.length);
+        if (yourNumber === magicNumber && !appearedObjects.includes(tiles[i])) {
+            appearedObjects.push(tiles[i]);
+            if (appearedObjects.length === 2) {
+                break;
             };
         };
-    }; // picks two tiles to appear randomly
-};
+    };
+}; // picks two tiles to appear randomly
+
 
 function iterateAppear() {
     for (const appearedObject of appearedObjects) {
-        appearedObject.classList.toggle('appear');
+        appearedObject.classList.toggle('appear')
 }
-}
+};
 
-chooseTwo();
 iterateAppear();
 
+function shuffleArray(items) {
+    const shuffled = [...items];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = randint(0, i);
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
 function oneTile() {
+    disappearedObjects.length = 0;
+    chosenOne.length = 0;
+    options.length = 0;
+
     for (const ogTile of tiles) {
         if (!appearedObjects.includes(ogTile)) {
             disappearedObjects.push(ogTile);
         }
     }
-    while (chosenOne.length < 1) {
-        for (let i=0; i < disappearedObjects.length - 1; i++) {
-            theNumber = randint(0, disappearedObjects.length-1);
-            secondMagicNumber = 0;
-            if (theNumber === secondMagicNumber) {
-                disappearedObjects[i].classList.add('win');
-                chosenOne.push(disappearedObjects[i]);
-                options.push(disappearedObjects[i]);
-                disappearedObjects[i].classList.toggle('challenge');
-                console.log(chosenOne[0]);
-                break;
 
-            }
-
-        }
+    if (disappearedObjects.length === 0) {
+        return;
     }
-}
+
+    const correctTile = disappearedObjects[randint(0, disappearedObjects.length - 1)];
+    correctTile.classList.add('win', 'challenge');
+    chosenOne.push(correctTile);
+    options.push(correctTile);
+
+    const remainingTiles = disappearedObjects.filter((tile) => tile !== correctTile);
+    const shuffledRemaining = shuffleArray(remainingTiles).slice(0, 3);
+
+    for (const tile of shuffledRemaining) {
+        options.push(tile);
+    }
+
+    const shuffledOptions = shuffleArray(options);
+    options.length = 0;
+    options.push(...shuffledOptions);
+};
 
 oneTile();
 
 function determineOptions() {
-    while (options.length < 4) {
-        for (let i=0; i < disappearedObjects.length-1; i++) {
-            anotherNumber = randint(0, options.length - 1);
-            thirdMagicNumber = 0;
-            if (anotherNumber === thirdMagicNumber && !options.includes(disappearedObjects[i]) && options.length != 4) {
-                anotherNotherNumber = randint(0,1);
-                if (anotherNotherNumber === 1) {
-                    options.push(disappearedObjects[i]);
-                }
-                else {
-                    options.unshift(disappearedObjects[i]);
-                }
-            }
-        }
-    }
-}
+    const shuffledOptions = shuffleArray(options);
+    options.length = 0;
+    options.push(...shuffledOptions);
+};
 
 determineOptions();
 
@@ -95,9 +99,9 @@ function makeOptionsVisible() {
         copiedChoice.style.visibility = 'visible';
         copiedChoice.style.width = '100%';
         copiedChoice.style.height = '100%';
-        optionContainers[i].appendChild(copiedChoice);
-    }
-}
+        optionContainers[i].appendChild(copiedChoice)
+    };
+};
 
 makeOptionsVisible();
 
@@ -110,9 +114,9 @@ function checkAnswer() {
                 }
                 else {
                     console.log('L');
-                }
+                };
         });
-    }
-}
+    };
+};
 
 checkAnswer();
